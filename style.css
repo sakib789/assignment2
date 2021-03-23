@@ -1,0 +1,17 @@
+h1{
+    font-family: 'Roboto', sans-serif;
+}
+span{
+    color: red;
+}
+#fortune001{
+    font-size: 50px;
+    color: red;
+    font-family: 'Syne Mono', monospace;
+}
+footer{
+    text-align: center;
+}
+.convt{
+    margin-bottom: 300px;
+}
