@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <body>
+        <div>
+            <h1>If you Want to Covert currency, enter a value of your desired currency and press ENTER</h1>
+        <input type="text" id="GBP" size="10" value="0" onchange="gbpfunc()"/>
+        <label for="GBP"> GBP </label>
+    
+        </br>
+    
+        <input type="text" id="USD" size="10" value="0" onchange="usdfunc()" />
+        <label for="USD"> USD </label>
+    
+        </br>
+    
+        <input type="text" id="EUR" size="10" value="0" onchange="eurfunc()" />
+        <label for="EUR"> EUR </label>
+    
+        </br>
+    
+        <input type="text" id="CAD" size="10" value="0" onchange="cadfunc()" />
+        <label for="CAD"> CAD </label>
+    
+        </br>
+    
+        <input type="text" id="AUD" size="10" value="0" onchange="audfunc()" />
+        <label for="AUD"> AUD </label>
+        </div>
+        <hr>
+        
+         
+    <footer>
+        <div><h1>See What fortune teller is saying about you</h1></div>
+        <div id="fortune001">
+
+        </div>
+    </footer>
+    
+    <script src="conv.js"></script>
+    <script>
+        var fortune = ["You will get an A on a test.",
+"You will be rich." ,
+"Good fortune will be yours." ,
+"You will have many friends.",
+"Do a good deed today.",
+"Someone will call you today.",
+"You will go to a party soon.",
+"Be careful on Tuesday."];
+
+        function rnd(){
+    var random_fortune = Math.floor(Math.random()*fortune.length);
+    document.getElementById("fortune001").innerHTML = fortune[random_fortune];
+}
+onload = function(){
+    rnd();
+}
+    </script>
+</body>
+</html>
