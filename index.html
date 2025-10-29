@@ -1,240 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Convertor</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="text/JavaScript">
-        function Questions(divname) {
-           this.QText   = new Array(10); // The questions
-           this.QAnswer = new Array(10); // The correct answers
-           this.QChoice = new Array(40); // The possible multi-choice values
-           this.thisAns = new Array(5); // The answers for this page
-           this.Answer  = new Array(5); // The user's answers
-           this.anchor = document.getElementById(divname);
-        
-           // OK, set the questions
-           this.QText[0] = "For which of the following disciplines is Nobel Prize awarded?";
-           this.QText[1] = "Hitler party which came into power in 1933 is known as";
-           this.QText[2] = "Fire temple is the place of worship of which of the following religion?";
-           this.QText[3] = "During World War II, when did Germany attack France?";
-           this.QText[4] = "The ozone layer restricts";
-           this.QText[5] = "Ecology deals with";
-           this.QText[6] = "What is the capital of Columbia";
-           this.QText[7] = "What is the capital of Barbados";
-           this.QText[8] = "What is the capital of Australia";
-           this.QText[9] = "What is the capital of Pakistan";
-        
-           // Now, set the possible choices
-           this.QChoice[0] = "Physics and Chemistry";
-           this.QChoice[1] = "Physiology or Medicine";
-           this.QChoice[2] = "Literature, Peace and Economics";
-           this.QChoice[3] = "All of the above";
-           this.QChoice[4] = "Labour Party";
-           this.QChoice[5] = "Nazi Party";
-           this.QChoice[6] = "Ku-Klux-Klan";
-           this.QChoice[7] = "Democratic Party";
-           this.QChoice[8] = "Taoism";
-           this.QChoice[9] = "Judaism";
-           this.QChoice[10] = "Zoroastrianism ";
-           this.QChoice[11] = "Shintoism";
-           this.QChoice[12] = "1940";
-           this.QChoice[13] = "1941";
-           this.QChoice[14] = "1942";
-           this.QChoice[15] = "1943";
-           this.QChoice[16] = "Visible light";
-           this.QChoice[17] = "Infrared radiation";
-           this.QChoice[18] = "X-rays and gamma rays";
-           this.QChoice[19] = "Ultraviolet radiation";
-           this.QChoice[20] = "Birds";
-           this.QChoice[21] = "Cell formation";
-           this.QChoice[22] = "Relation between organisms and their environment";
-           this.QChoice[23] = "Tissues";
-           this.QChoice[24] = "Bogota";
-           this.QChoice[25] = "Cali";
-           this.QChoice[26] = "Medellin";
-           this.QChoice[27] = "Panama";
-           this.QChoice[28] = "Havana";
-           this.QChoice[29] = "Bridgetown";
-           this.QChoice[30] = "Kingston";
-           this.QChoice[31] = "Montego Bay";
-           this.QChoice[32] = "Sydney";
-           this.QChoice[33] = "Brisbane";
-           this.QChoice[34] = "Melbourne";
-           this.QChoice[35] = "Canberra";
-           this.QChoice[36] = "Kabul";
-           this.QChoice[37] = "Karachi";
-           this.QChoice[38] = "Islamabad";
-           this.QChoice[39] = "New Delhi";
-        
-           // Set the correct answers
-           this.QAnswer[0] = 4;
-           this.QAnswer[1] = 2;
-           this.QAnswer[2] = 3;
-           this.QAnswer[3] = 1;
-           this.QAnswer[4] = 4;
-           this.QAnswer[5] = 3;
-           this.QAnswer[6] = 3;
-           this.QAnswer[7] = 2;
-           this.QAnswer[8] = 4;
-           this.QAnswer[9] = 3;
-        
-        }
-        
-        Questions.prototype.generateQuiz = function() {
-           var QCount = 0;
-           var QNumber = 0;
-        
-           // Initialise the "questions available" table
-           var QUsed = new Array(10);
-           for (QCount=0; QCount<10; QCount++) {
-              QUsed[QCount] = 1; // Marked as available
-           }
-        
-           // Delete any existing questions
-           //this.nukeExistingQuiz();
-           this.anchor.innerHTML = "";
-        
-           var HTMLBlob = "<table>";
-        
-           // Build up the questions
-           for (QCount=0; QCount<5; ) {
-              QNumber = Math.floor(10 * Math.random());
-              if (1 == QUsed[QNumber]) { // Still available?
-             HTMLBlob += this.AddQuestion(QNumber, QCount);
-             QCount++;
-                 QUsed[QNumber] = 0; // Marked as unavailable
-              }
-           }
-           HTMLBlob += "</table>";
-           this.anchor.innerHTML = HTMLBlob;
-        }
-        
-        // This removes any existing quiz on the page
-        Questions.prototype.nukeExistingQuiz = function() {
-           if (null != this.anchor && null != this.anchor.childCount) {
-              while (this.anchor.childCount > 0) {
-                 this.anchor.removeChild(this.anchor.childNodes[0]);
-              }
-           }
-        }
-        
-        // Add this to the DOM
-        Questions.prototype.AddQuestion = function(QNum, EntryNum) {
-           // This is really naughty: you should use DOM stuff, and not
-           // non-standard innerHtml ...
-           var Ix;
-           var HTMLBlob = "<tr><td><input type=\"checkbox\" id=\"check" + EntryNum + "\" checked=\"checked\"></td><td>"
-                               + QNum + ":</td><td>"
-                               + "<strong>" + this.QText[QNum] + "</strong></td><td><select id=\"answer" + EntryNum + "\" size=\"1\">"
-                               + "<option selected=\"selected\" value=\"0\">-- Select an answer --</option>"
-           for (Ix=0; Ix<4; Ix++) {
-              HTMLBlob = HTMLBlob + "<option value=\"" + Ix + "\">" + this.QChoice[QNum*4+Ix] + "</option>";
-           }
-           HTMLBlob = HTMLBlob + "</select></td></tr>";
-           
-           this.thisAns[EntryNum] = this.QAnswer[QNum];
-           return HTMLBlob;
-        }
-        
-        
-        // Verify that all questions have been answered
-        Questions.prototype.AreQuestionsAnswered = function() {
-           var unanswered = 0;
-           for (var Ix=0; Ix<5; Ix++) {
-              this.Answer[Ix] = document.getElementById("answer" + Ix).selectedIndex;
-              if (this.Answer[Ix] == 0) {
-                 unanswered++;
-              }
-           }
-           return unanswered;
-        }
-        
-        // Score the results
-        Questions.prototype.ScoreIt = function() {
-           var count = this.AreQuestionsAnswered();
-           if (count > 0) {
-              alert("You didn't answer " + count + " questions. Please try again.");
-              count = 0;
-           } else {
-              for (var Ix=0; Ix<5; Ix++) {
-                 if (this.Answer[Ix] == this.thisAns[Ix]) {
-                    document.getElementById("check" + Ix).checked = false;
-                    count++;
-                 } else {
-                    document.getElementById("check" + Ix).checked = true;
-                 }
-              }
-              alert("You got " + count + " correct.");
-           }
-           return count;
-        }
-        </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIEM Dashboard</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f6fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1e1e2f;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav {
+      background-color: #2f2f45;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 10px 0;
+    }
+
+    nav a {
+      color: #cfcfea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #4ad991;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .sidebar {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .main {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+      background-color: #f8f9fb;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      background-color: #1e1e2f;
+      color: #ccc;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .status div {
+      text-align: center;
+      flex: 1;
+    }
+
+    .status h2 {
+      color: #4ad991;
+      margin-bottom: 5px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 315px;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-        <div class="convt">
-            <h1>If you Want to Covert currency,<br> enter a value of your desired currency and press <span>ENTER</span></h1>
-        <input type="text" id="GBP" size="10" value="0" onchange="gbpfunc()"/>
-        <label for="GBP"> GBP </label>
-    
-        </br>
-    
-        <input type="text" id="USD" size="10" value="0" onchange="usdfunc()" />
-        <label for="USD"> USD </label>
-    
-        </br>
-    
-        <input type="text" id="EUR" size="10" value="0" onchange="eurfunc()" />
-        <label for="EUR"> EUR </label>
-    
-        </br>
-    
-        <input type="text" id="CAD" size="10" value="0" onchange="cadfunc()" />
-        <label for="CAD"> CAD </label>
-    
-        </br>
-    
-        <input type="text" id="AUD" size="10" value="0" onchange="audfunc()" />
-        <label for="AUD"> AUD </label>
+
+  <header>
+    🛡️ SIEM Dashboard
+  </header>
+
+  <nav>
+    <a href="#">Dashboard</a>
+    <a href="#">Alerts</a>
+    <a href="#">Logs</a>
+    <a href="#">Analytics</a>
+    <a href="#">Settings</a>
+  </nav>
+
+  <div class="container">
+    <aside class="sidebar">
+      <h3>Quick Filters</h3>
+      <ul>
+        <li>Critical Alerts</li>
+        <li>System Logs</li>
+        <li>User Activity</li>
+        <li>Network Traffic</li>
+        <li>Malware Detection</li>
+      </ul>
+    </aside>
+
+    <section class="main">
+      <h2>System Overview</h2>
+      <div class="status">
+        <div>
+          <h2>12</h2>
+          <p>Active Alerts</p>
         </div>
-        <h1>Test Your General Knowledge</h1>
-        <div id="quizblock"></div>
-
-   <script type="text/JavaScript">
-      var MyQuiz = new Questions("quizblock");
-      MyQuiz.generateQuiz();
-   </script>
-
-   <input type="button" onclick="MyQuiz.ScoreIt();" value="Done">
-   <hr>
-         
-    <footer>
-        <div><h1>See What fortune teller is saying about you</h1></div>
-        <div id="fortune001">
-
+        <div>
+          <h2>3</h2>
+          <p>Critical Issues</p>
         </div>
-    </footer>
-    
-    <script src="conv.js"></script>
-    <script>
-        var fortune = ["You will get an A on a test.",
-"You will be rich." ,
-"Good fortune will be yours." ,
-"You will have many friends.",
-"Do a good deed today.",
-"Someone will call you today.",
-"You will go to a party soon.",
-"Be careful on Tuesday."];
+        <div>
+          <h2>87%</h2>
+          <p>System Health</p>
+        </div>
+      </div>
 
-        function rnd(){
-    var random_fortune = Math.floor(Math.random()*fortune.length);
-    document.getElementById("fortune001").innerHTML = fortune[random_fortune];
-}
-onload = function(){
-    rnd();
-}
-    </script>
+      <div class="card">
+        <h3>Recent Alerts</h3>
+        <ul>
+          <li>[High] Unauthorized login attempt detected from 192.168.1.45</li>
+          <li>[Medium] Suspicious process execution: powershell.exe</li>
+          <li>[Low] New admin user created by HR system</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Log Summary</h3>
+        <p>Last updated: 2025-10-29 10:00:00</p>
+        <p>Processed 2,340 logs in the past hour.</p>
+      </div>
+
+      <div class="card">
+        <h3>Analytics</h3>
+        <p>Top 3 Sources:</p>
+        <ol>
+          <li>Firewall - 45%</li>
+          <li>Endpoint - 35%</li>
+          <li>Server Logs - 20%</li>
+        </ol>
+        
+        <!-- YouTube video iframe -->
+<iframe 
+  src="https://player.vimeo.com/video/76979871"
+  width="640"
+  height="360"
+  frameborder="0"
+  allow="autoplay; fullscreen; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
+<iframe src="https://192.168.161.128/app/dashboards#/view/5990509f-4243-40e7-bca2-00a6381ccfe0?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-24h,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),query:(language:kuery,query:''),timeRestore:!f,title:wazuh-security-events-v1.0,viewMode:view)" height="600" width="800"></iframe>
+
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 SIEM System | Secure. Monitor. Protect.
+  </footer>
+
 </body>
 </html>
